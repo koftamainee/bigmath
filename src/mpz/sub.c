@@ -5,7 +5,6 @@
 void mpz_sub(mpz_ptr rop, const mpz_srcptr op1, const mpz_srcptr op2) {
   int s1 = mpz_sgn(op1);
   int s2 = mpz_sgn(op2);
-  printf("sgn1: %d, sgn2: %d\n", s1, s2);
 
   if (s1 == 0) {
     mpz_set(rop, op2);

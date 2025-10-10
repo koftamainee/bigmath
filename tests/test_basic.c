@@ -13,10 +13,10 @@ int main() {
   mpz_init_set_ui(d, 100);
 
   mpz_add(a, a, b);
-  printf("%d\n", mpz_cmp(a, c));
+  printf("%ld\n", mpz_get_si(a));
   mpz_neg(a, a);
   printf("%ld\n", mpz_get_si(a));
   mpz_sub(a, d, b);
   printf("%ld\n", mpz_get_si(a));
-  mpz_clear_multiple(a, b, c, NULL);
+  mpz_clear_multiple(a, b, c, d, NULL);
 }
