@@ -2,7 +2,7 @@
 
 #include "bigmath/mpz.h"
 
-void mpz_init_multiple(mpz_ptr x, ...) {
+void mpz_inits(mpz_ptr x, ...) {
   va_list args;
   va_start(args, x);
 

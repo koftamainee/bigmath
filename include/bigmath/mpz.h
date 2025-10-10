@@ -31,19 +31,19 @@ void mpz_set(mpz_ptr rop, mpz_srcptr op) BIGMATH_NOTHROW;
 
 void mpz_set_ui(mpz_ptr rop, unsigned long int val) BIGMATH_NOTHROW;
 
-void mpz_init_multiple(mpz_ptr x, ...) BIGMATH_NOTHROW;
+void mpz_inits(mpz_ptr x, ...) BIGMATH_NOTHROW;
 
-void mpz_set_ui_multiple(mpz_ptr x, ...) BIGMATH_NOTHROW;
+void mpz_sets_ui(mpz_ptr x, ...) BIGMATH_NOTHROW;
 
-void mpz_set_multiple(mpz_ptr x, ...) BIGMATH_NOTHROW;
+void mpz_sets(mpz_ptr x, ...) BIGMATH_NOTHROW;
 
-void mpz_init_set_ui_multiple(mpz_ptr x, ...) BIGMATH_NOTHROW;
+void mpz_inits_sets_ui(mpz_ptr x, ...) BIGMATH_NOTHROW;
 
-void mpz_init_set_multiple(mpz_ptr x, ...) BIGMATH_NOTHROW;
+void mpz_inits_sets(mpz_ptr x, ...) BIGMATH_NOTHROW;
 
 void mpz_clear(mpz_ptr x) BIGMATH_NOTHROW;
 
-void mpz_clear_multiple(mpz_ptr x, ...) BIGMATH_NOTHROW;
+void mpz_clears(mpz_ptr x, ...) BIGMATH_NOTHROW;
 
 unsigned long int mpz_get_ui(mpz_srcptr x) BIGMATH_ATTR_PURE BIGMATH_NOTHROW;
 

@@ -18,14 +18,14 @@ void mpz_sub(mpz_ptr rop, const mpz_srcptr op1, const mpz_srcptr op2) {
 
   if (s1 != s2) {  // TODO: mb remove copy and rewrite for multithreading
     mpz_t cp1, cp2;
-    mpz_init_set_multiple(cp1, op1, cp2, op2, NULL);
+    mpz_inits_sets(cp1, op1, cp2, op2, NULL);
     if (s1 < 0) {
       SIZ(cp1) = -SIZ(cp1);
     } else {
       SIZ(cp2) = -SIZ(cp2);
     }
     mpz_add(rop, cp1, cp2);
-    mpz_clear_multiple(cp1, cp2);
+    mpz_clears(cp1, cp2);
     return;
   }
 

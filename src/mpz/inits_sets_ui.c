@@ -1,6 +1,6 @@
 #include "bigmath/mpz.h"
 
-void mpz_init_set_ui_multiple(mpz_ptr rop, ...) {
+void mpz_inits_sets_ui(mpz_ptr rop, ...) {
   va_list args;
   va_start(args, rop);
 
