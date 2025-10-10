@@ -1,5 +1,4 @@
-#include "__defines.h"
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 void mpz_set_ui(mpz_ptr rop, unsigned long int val) {
   if (val == 0) {
@@ -13,14 +12,12 @@ void mpz_set_ui(mpz_ptr rop, unsigned long int val) {
     return;
   }
 
-  if (ALLOC(rop) < 1) {
-    if (ALLOC(rop) == 0) {
-      PTR(rop) = __BIGMATH_ALLOC_LIMBS(1);
-    } else {
-      PTR(rop) = __BIGMATH_REALLOC_LIMBS(PTR(rop), ALLOC(rop), 1);
-    }
-    ALLOC(rop) = 1;
+  if (ALLOC(rop) == 0) {
+    PTR(rop) = __BIGMATH_ALLOC_LIMBS(1);
+  } else {
+    PTR(rop) = __BIGMATH_REALLOC_LIMBS(PTR(rop), ALLOC(rop), 1);
   }
+  ALLOC(rop) = 1;
 
   PTR(rop)[0] = (mp_limb_t)val;
   SIZ(rop) = 1;

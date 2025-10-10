@@ -1,4 +1,4 @@
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 void mpz_init(mpz_ptr x) {
   ALLOC(x) = 0;

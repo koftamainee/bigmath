@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include "__mpq.h"
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 #ifdef __cplusplus
 }

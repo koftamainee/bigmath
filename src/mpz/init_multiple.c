@@ -1,12 +1,14 @@
-#include "__mpz.h"
+#include <stdarg.h>
 
-void mpz_init_multiple(int count, ...) {
+#include "bigmath/mpz.h"
+
+void mpz_init_multiple(mpz_ptr x, ...) {
   va_list args;
-  va_start(args, count);
+  va_start(args, x);
 
-  for (int i = 0; i < count; i++) {
-    mpz_ptr x = va_arg(args, mpz_ptr);
+  while (x != NULL) {
     mpz_init(x);
+    x = va_arg(args, mpz_ptr);
   }
 
   va_end(args);

@@ -11,6 +11,7 @@ extern "C" {
 
 typedef unsigned long int mp_limb_t;
 typedef mp_limb_t *mp_ptr;
+typedef long int mp_size_t;
 typedef unsigned long int mp_bitcnt_t;
 
 extern void *(*__bigmath_allocate_func)(size_t);
@@ -33,6 +34,7 @@ static void *__bigmath_default_allocate(size_t size) {
 }
 
 static void *__bigmath_default_reallocate(void *ptr, size_t old_size, size_t new_size) {
+  fflush(stdout);
   (void)old_size;
   void *mem = realloc(ptr, new_size);
   if (!mem) {
@@ -43,13 +45,8 @@ static void *__bigmath_default_reallocate(void *ptr, size_t old_size, size_t new
 
 static void __bigmath_default_free(void *ptr, size_t size) {
   (void)size;
-  free(ptr);
-}
 
-__attribute__((constructor)) static void __bigmath_init_allocators(void) {
-  __bigmath_allocate_func = __bigmath_default_allocate;
-  __bigmath_reallocate_func = __bigmath_default_reallocate;
-  __bigmath_free_func = __bigmath_default_free;
+  free(ptr);
 }
 
 static void bigmath_set_allocators(void *(*alloc)(size_t), void *(*realloc)(void *, size_t, size_t),

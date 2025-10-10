@@ -1,4 +1,4 @@
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 void mpz_init_set_ui(mpz_ptr rop, unsigned long int val) {
   mpz_init(rop);

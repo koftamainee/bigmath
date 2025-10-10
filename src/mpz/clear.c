@@ -1,5 +1,4 @@
-#include "__defines.h"
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 void mpz_clear(mpz_ptr x) {
   if (ALLOC(x)) {

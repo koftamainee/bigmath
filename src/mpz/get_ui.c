@@ -1,4 +1,4 @@
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 unsigned long int mpz_get_ui(mpz_srcptr x) {
   if (SIZ(x) == 0) {

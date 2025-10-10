@@ -5,8 +5,8 @@ TARGET_DIR := target
 EXAMPLES_DIR := examples
 TESTS_DIR := tests
 
-CC := gcc
-CFLAGS := -O3 -Wall -Wextra -Iinclude -march=native
+CC := clang
+CFLAGS := -g -Wall -Wextra -Iinclude
 LDFLAGS :=
 
 # Recursively collect all .c files

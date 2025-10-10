@@ -1,7 +1,6 @@
 #include <string.h>
 
-#include "__defines.h"
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
 void mpz_set(mpz_ptr rop, mpz_srcptr op) {
   int n = SIZ(op) < 0 ? -SIZ(op) : SIZ(op);

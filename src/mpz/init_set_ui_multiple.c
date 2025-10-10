@@ -1,13 +1,13 @@
-#include "__mpz.h"
+#include "bigmath/mpz.h"
 
-void mpz_init_set_ui_multiple(int count, ...) {
+void mpz_init_set_ui_multiple(mpz_ptr rop, ...) {
   va_list args;
-  va_start(args, count);
+  va_start(args, rop);
 
-  for (int i = 0; i < count; i++) {
-    mpz_ptr rop = va_arg(args, mpz_ptr);
+  while (rop != NULL) {
     unsigned long int val = va_arg(args, unsigned long int);
     mpz_init_set_ui(rop, val);
+    rop = va_arg(args, mpz_ptr);
   }
 
   va_end(args);
