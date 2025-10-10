@@ -2,7 +2,6 @@
 #include <limits.h>
 #include <stdio.h>
 
-#include "bigmath.h"
 #include "bigmath/mpz.h"
 
 int main() {

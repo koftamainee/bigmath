@@ -26,6 +26,7 @@ void mpz_sub(mpz_ptr rop, const mpz_srcptr op1, const mpz_srcptr op2) {
       SIZ(cp2) = -SIZ(cp2);
     }
     mpz_add(rop, cp1, cp2);
+    mpz_clear_multiple(cp1, cp2);
     return;
   }
 
