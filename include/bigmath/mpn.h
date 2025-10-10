@@ -1,5 +1,5 @@
-#ifndef BIGMATH_MPN_H
-#define BIGMATH_MPN_H
+#ifndef __BIGMATH_MPN_H
+#define __BIGMATH_MPN_H
 
 #include "bigmath/defines.h"
 

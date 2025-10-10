@@ -1,5 +1,5 @@
-#ifndef BIGMATH_H
-#define BIGMATH_H
+#ifndef __BIGMATH_H
+#define __BIGMATH_H
 
 #ifdef __cplusplus
 extern "C" {
