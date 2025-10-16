@@ -18,5 +18,6 @@ int main() {
   printf("%ld\n", mpz_get_si(a));
   mpz_sub(a, d, b);
   printf("%ld\n", mpz_get_si(a));
+
   mpz_clears(a, b, c, d, NULL);
 }
