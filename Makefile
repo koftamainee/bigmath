@@ -1,69 +1,123 @@
-# === TARGETS ===
-LIB_NAME := bigmath
+# === CONFIGURATION ===
+TARGET := libbigmath.a
+
+BUILD_TYPE ?= Release
+GENERATOR ?= Ninja
 BUILD_DIR := build
 TARGET_DIR := target
-EXAMPLES_DIR := examples
-TESTS_DIR := tests
+CMAKE_CMD := cmake
+DEBUGGER_CMD := pwndbg
+ARGS := # Extra args for example/test runs
 
-CC := clang
-CFLAGS := -g -Wall -Wextra -Iinclude
-LDFLAGS :=
+EXAMPLE := factorial
+TEST := test_basic
 
-# Recursively collect all .c files
-SRC := $(shell find src -name '*.c')
-OBJ := $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRC))
+ifeq ($(V),1)
+	Q :=
+else
+	Q := @
+endif
 
-.PHONY: all clean build lib examples tests run_example help
+.PHONY: all configure build clean cleanbuild debug release examples run_example tests run_tests pwn valgrind analyze analyze_fix help
 
 # === DEFAULT TARGET ===
 all: build
 
-# === BUILD LIBRARY ===
-build: $(BUILD_DIR)/lib$(LIB_NAME).a
+# === CMAKE CONFIGURATION ===
+configure:
+	$(Q)echo "Configuring project for $(BUILD_TYPE) build [$(GENERATOR)]..."
+	$(Q)mkdir -p "$(BUILD_DIR)/$(BUILD_TYPE)"
+	$(Q)$(CMAKE_CMD) -S . -B "$(BUILD_DIR)/$(BUILD_TYPE)" \
+		-G "$(GENERATOR)" \
+		-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+		-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=$(abspath $(TARGET_DIR)) \
+		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$(abspath $(TARGET_DIR)) \
+		-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(abspath $(TARGET_DIR))
+	$(Q)ln -sf "$(BUILD_DIR)/$(BUILD_TYPE)/compile_commands.json" compile_commands.json
 
-$(BUILD_DIR)/lib$(LIB_NAME).a: $(OBJ)
-	@mkdir -p $(TARGET_DIR)
-	ar rcs $@ $^
+# === BUILD TARGETS ===
+build: configure
+	$(Q)echo "Building project ($(BUILD_TYPE))..."
+	$(Q)$(CMAKE_CMD) --build "$(BUILD_DIR)/$(BUILD_TYPE)"
 
-# Compile each .c file to corresponding build/.o preserving subdirs
-$(BUILD_DIR)/%.o: src/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+examples: build
+	$(Q)$(CMAKE_CMD) --build "$(BUILD_DIR)/$(BUILD_TYPE)" --target $(EXAMPLE)
 
-# === EXAMPLES ===
-examples: $(EXAMPLES_DIR)/factorial
-
-$(EXAMPLES_DIR)/factorial: $(EXAMPLES_DIR)/factorial.c $(BUILD_DIR)/lib$(LIB_NAME).a
-	@mkdir -p $(TARGET_DIR)
-	$(CC) $(CFLAGS) $< $(BUILD_DIR)/lib$(LIB_NAME).a -o $(TARGET_DIR)/factorial
-
-run_example: examples
-	@echo "Running factorial example..."
-	$(TARGET_DIR)/factorial
-
-# === TESTS ===
-tests: $(TESTS_DIR)/test_basic
-
-$(TESTS_DIR)/test_basic: $(TESTS_DIR)/test_basic.c $(BUILD_DIR)/lib$(LIB_NAME).a
-	@mkdir -p $(TARGET_DIR)
-	$(CC) $(CFLAGS) $< $(BUILD_DIR)/lib$(LIB_NAME).a -o $(TARGET_DIR)/test_basic
-
-run_tests: tests
-	@echo "Running tests..."
-	$(TARGET_DIR)/test_basic
+tests: build
+	$(Q)$(CMAKE_CMD) --build "$(BUILD_DIR)/$(BUILD_TYPE)" --target $(TEST)
 
 # === CLEAN ===
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET_DIR)
+	$(Q)echo "Cleaning build artifacts..."
+	$(Q)rm -rf "$(BUILD_DIR)" "$(TARGET_DIR)" compile_commands.json
+
+cleanbuild: clean build
+
+# === BUILD VARIANTS ===
+debug:
+	$(Q)$(MAKE) BUILD_TYPE=Debug build
+
+release:
+	$(Q)$(MAKE) BUILD_TYPE=Release build
+
+# === RUNNING ===
+run_example: debug
+	$(Q)echo "Running example: $(EXAMPLE)"
+	$(Q)echo "--------------------------------"
+	$(Q)"$(TARGET_DIR)/$(EXAMPLE)" $(ARGS)
+
+run_tests: debug
+	$(Q)echo "Running tests..."
+	$(Q)echo "--------------------------------"
+	$(Q)"$(TARGET_DIR)/$(TEST)" $(ARGS)
+
+# === DEBUGGING ===
+pwn: debug
+	$(Q)echo "Starting pwndbg session..."
+	$(Q)echo "--------------------------------"
+	$(Q)$(DEBUGGER_CMD) "$(TARGET_DIR)/$(EXAMPLE)"
+
+valgrind: debug
+	$(Q)echo "Running under Valgrind..."
+	$(Q)echo "--------------------------------"
+	$(Q)valgrind --leak-check=full --show-leak-kinds=all \
+		--track-origins=yes --error-exitcode=1 \
+		"$(TARGET_DIR)/$(EXAMPLE)" $(ARGS)
+
+# === STATIC ANALYSIS ===
+analyze: build
+	$(Q)echo "Running clang-tidy analysis..."
+	$(Q)find src include -type f \( -name '*.c' -o -name '*.h' \) \
+		| xargs clang-tidy -p "$(BUILD_DIR)/$(BUILD_TYPE)"
+
+analyze_fix: build
+	$(Q)echo "Running clang-tidy with auto-fix..."
+	$(Q)find src include -type f \( -name '*.c' -o -name '*.h' \) \
+		| xargs clang-tidy -p "$(BUILD_DIR)/$(BUILD_TYPE)" --fix
 
 # === HELP ===
 help:
-	@echo "bigmath Makefile"
-	@echo "Targets:"
-	@echo "  all           - Build library and examples"
-	@echo "  build         - Build lib$(LIB_NAME).a"
-	@echo "  examples      - Build example programs"
-	@echo "  run_example   - Run factorial example"
-	@echo "  tests         - Build tests"
-	@echo "  run_tests     - Run all tests"
-	@echo "  clean         - Remove build artifacts"
+	$(Q)echo "bigmath Build System"
+	$(Q)echo "Targets:"
+	$(Q)echo "  all           - Default build (Release)"
+	$(Q)echo "  build         - Build project (BUILD_TYPE=Release)"
+	$(Q)echo "  debug         - Build Debug version"
+	$(Q)echo "  release       - Build Release version"
+	$(Q)echo "  examples      - Build example programs"
+	$(Q)echo "  run_example   - Run example binary (ARGS=...)"
+	$(Q)echo "  tests         - Build test binaries"
+	$(Q)echo "  run_tests     - Run tests"
+	$(Q)echo "  pwn           - Debug example with pwndbg"
+	$(Q)echo "  valgrind      - Run example under Valgrind"
+	$(Q)echo "  analyze       - Static analysis with clang-tidy"
+	$(Q)echo "  analyze_fix   - clang-tidy auto-fix mode"
+	$(Q)echo "  clean         - Remove build artifacts"
+	$(Q)echo "  cleanbuild    - Clean then rebuild"
+	$(Q)echo "  help          - Show this message"
+	$(Q)echo ""
+	$(Q)echo "Variables:"
+	$(Q)echo "  BUILD_TYPE    - Debug/Release (default: Release)"
+	$(Q)echo "  GENERATOR     - CMake generator (default: Ninja)"
+	$(Q)echo "  V=1           - Verbose output"
+	$(Q)echo "  ARGS          - Arguments for example/test run"

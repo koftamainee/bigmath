@@ -5,18 +5,20 @@
 #include "bigmath/mpz.h"
 
 int main() {
-  printf("Hello world!\n");
-  mpz_t a, b, c, d;
-  mpz_init_set_ui(a, 52);
-  mpz_init_set_ui(b, 48);
-  mpz_init_set_ui(c, 100);
-  mpz_init_set_ui(d, 100);
+  mpz_t a, b, temp;
+  mpz_init_set_ui(a, 1);
+  mpz_init_set_ui(b, 1);
 
-  mpz_add(a, a, b);
-  printf("%ld\n", mpz_get_si(a));
-  mpz_neg(a, a);
-  printf("%ld\n", mpz_get_si(a));
-  mpz_sub(a, d, b);
-  printf("%ld\n", mpz_get_si(a));
-  mpz_clears(a, b, c, d, NULL);
+  for (int i = 0; i < 100000; ++i) {
+    mpz_set(temp, b);
+    mpz_add(b, a, b);
+    mpz_set(a, temp);
+  }
+
+  for (int i = 0; i < abs(SIZ(b)); ++i) {
+    printf("%lu ", PTR(b)[i]);
+  }
+  printf("\n");
+
+  mpz_clears(a, b, NULL);
 }

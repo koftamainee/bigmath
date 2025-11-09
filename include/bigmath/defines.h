@@ -9,6 +9,15 @@
 extern "C" {
 #endif
 
+#define BIGMATH_NOTHROW __attribute__((__nothrow__))
+#define BIGMATH_ATTR_CONST __attribute__((__const__))
+#define BIGMATH_ATTR_PURE __attribute__((__pure__))
+#define BIGMATH_ATTRIBUTE_ALIGN(x) __attribute__((__aligned__(x)))
+#define BIGMATH_ATTRIBUTE_UNUSED __attribute__((__unused__))
+#define BIGMATH_ATTRIBUTE_MALLOC __attribute__((__malloc__))
+#define BIGMATH_ATTRIBUTE_NONNULL(...) __attribute__((__nonnull__(__VA_ARGS__)))
+#define BIGMATH_ATTRIBUTE_WARN_UNUSED_RESULT __attribute__((__warn_unused_result__))
+
 typedef unsigned long int mp_limb_t;
 typedef mp_limb_t *mp_ptr;
 typedef long int mp_size_t;
@@ -49,6 +58,7 @@ static void __bigmath_default_free(void *ptr, size_t size) {
   free(ptr);
 }
 
+BIGMATH_ATTRIBUTE_UNUSED
 static void bigmath_set_allocators(void *(*alloc)(size_t), void *(*realloc)(void *, size_t, size_t),
                                    void (*freefn)(void *, size_t)) {
   __bigmath_allocate_func = alloc ? alloc : __bigmath_default_allocate;
@@ -66,15 +76,6 @@ static void bigmath_set_allocators(void *(*alloc)(size_t), void *(*realloc)(void
 #define __BIGMATH_ALLOC_LIMBS(n) __BIGMATH_ALLOC_TYPE(n, mp_limb_t)
 #define __BIGMATH_REALLOC_LIMBS(p, old_n, new_n) __BIGMATH_REALLOC_TYPE(p, old_n, new_n, mp_limb_t)
 #define __BIGMATH_FREE_FUNC_LIMBS(p, n) __BIGMATH_FREE_FUNC_TYPE(p, n, mp_limb_t)
-
-#define BIGMATH_NOTHROW __attribute__((__nothrow__))
-#define BIGMATH_ATTR_CONST __attribute__((__const__))
-#define BIGMATH_ATTR_PURE __attribute__((__pure__))
-#define BIGMATH_ATTRIBUTE_ALIGN(x) __attribute__((__aligned__(x)))
-#define BIGMATH_ATTRIBUTE_UNUSED __attribute__((__unused__))
-#define BIGMATH_ATTRIBUTE_MALLOC __attribute__((__malloc__))
-#define BIGMATH_ATTRIBUTE_NONNULL(...) __attribute__((__nonnull__(__VA_ARGS__)))
-#define BIGMATH_ATTRIBUTE_WARN_UNUSED_RESULT __attribute__((__warn_unused_result__))
 
 #ifdef __cplusplus
 }
