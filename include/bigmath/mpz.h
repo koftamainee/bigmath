@@ -14,12 +14,12 @@ extern "C" {
 typedef struct {
   int _mp_alloc;
   int _mp_size;
-  mp_limb_t *_mp_d;
+  mp_limb_t* _mp_d;
 } __mpz_struct BIGMATH_ATTRIBUTE_ALIGN(sizeof(mp_limb_t));
 
 typedef __mpz_struct mpz_t[1] BIGMATH_ATTRIBUTE_ALIGN(sizeof(mp_limb_t));
-typedef __mpz_struct *mpz_ptr;
-typedef const __mpz_struct *mpz_srcptr;
+typedef __mpz_struct* mpz_ptr;
+typedef const __mpz_struct* mpz_srcptr;
 
 void mpz_init(mpz_ptr x) BIGMATH_NOTHROW;
 
@@ -115,7 +115,7 @@ unsigned long int mpz_size(mpz_srcptr x) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMA
 
 unsigned long int mpz_sizeinbase(mpz_srcptr x, int base) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
 
-char *mpz_get_str(char *str, int base, mpz_srcptr x) BIGMATH_NOTHROW
+char* mpz_get_str(char* str, int base, mpz_srcptr x) BIGMATH_NOTHROW
     BIGMATH_ATTRIBUTE_NONNULL(3) BIGMATH_ATTRIBUTE_WARN_UNUSED_RESULT;
 
 unsigned long int mpz_popcount(mpz_srcptr x) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);

@@ -19,13 +19,13 @@ extern "C" {
 #define BIGMATH_ATTRIBUTE_WARN_UNUSED_RESULT __attribute__((__warn_unused_result__))
 
 typedef unsigned long int mp_limb_t;
-typedef mp_limb_t *mp_ptr;
+typedef mp_limb_t* mp_ptr;
 typedef long int mp_size_t;
 typedef unsigned long int mp_bitcnt_t;
 
-extern void *(*__bigmath_allocate_func)(size_t);
-extern void *(*__bigmath_reallocate_func)(void *, size_t, size_t);
-extern void (*__bigmath_free_func)(void *, size_t);
+extern void* (*__bigmath_allocate_func)(size_t);
+extern void* (*__bigmath_reallocate_func)(void*, size_t, size_t);
+extern void (*__bigmath_free_func)(void*, size_t);
 
 static const mp_limb_t __bigmath_dummy_limb = 0xc1a0;
 
@@ -34,42 +34,41 @@ static void __bigmath_memory_fail(void) {
   abort();
 }
 
-static void *__bigmath_default_allocate(size_t size) {
-  void *mem = malloc(size);
+static void* __bigmath_default_allocate(size_t size) {
+  void* mem = malloc(size);
   if (!mem) {
     __bigmath_memory_fail();
   }
   return mem;
 }
 
-static void *__bigmath_default_reallocate(void *ptr, size_t old_size, size_t new_size) {
-  fflush(stdout);
+static void* __bigmath_default_reallocate(void* ptr, size_t old_size, size_t new_size) {
   (void)old_size;
-  void *mem = realloc(ptr, new_size);
+  void* mem = realloc(ptr, new_size);
   if (!mem) {
     __bigmath_memory_fail();
   }
   return mem;
 }
 
-static void __bigmath_default_free(void *ptr, size_t size) {
+static void __bigmath_default_free(void* ptr, size_t size) {
   (void)size;
 
   free(ptr);
 }
 
 BIGMATH_ATTRIBUTE_UNUSED
-static void bigmath_set_allocators(void *(*alloc)(size_t), void *(*realloc)(void *, size_t, size_t),
-                                   void (*freefn)(void *, size_t)) {
+static void bigmath_set_allocators(void* (*alloc)(size_t), void* (*realloc)(void*, size_t, size_t),
+                                   void (*freefn)(void*, size_t)) {
   __bigmath_allocate_func = alloc ? alloc : __bigmath_default_allocate;
   __bigmath_reallocate_func = realloc ? realloc : __bigmath_default_reallocate;
   __bigmath_free_func = freefn ? freefn : __bigmath_default_free;
 }
 
-#define __BIGMATH_ALLOC_TYPE(n, type) ((type *)__bigmath_allocate_func((n) * sizeof(type)))
+#define __BIGMATH_ALLOC_TYPE(n, type) ((type*)__bigmath_allocate_func((n) * sizeof(type)))
 
 #define __BIGMATH_REALLOC_TYPE(p, old_n, new_n, type) \
-  ((type *)__bigmath_reallocate_func((p), (old_n) * sizeof(type), (new_n) * sizeof(type)))
+  ((type*)__bigmath_reallocate_func((p), (old_n) * sizeof(type), (new_n) * sizeof(type)))
 
 #define __BIGMATH_FREE_FUNC_TYPE(p, n, type) (__bigmath_free_func((p), (n) * sizeof(type)))
 
