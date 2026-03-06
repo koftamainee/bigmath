@@ -2,6 +2,7 @@ add_executable(test_bigmath
         ${CMAKE_CURRENT_SOURCE_DIR}/test_mpn.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test_mpz.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test_bigint.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test_mpz_big.cpp
 )
 
 target_link_libraries(test_bigmath
