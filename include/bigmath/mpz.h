@@ -89,15 +89,15 @@ void mpz_pow_ui(mpz_ptr rop, mpz_srcptr base, unsigned long int exp) BIGMATH_NOT
 void mpz_powm(mpz_ptr rop, mpz_srcptr base, mpz_srcptr exp, mpz_srcptr mod) BIGMATH_NOTHROW
     BIGMATH_ATTRIBUTE_NONNULL(1, 2, 3, 4);
 
-int mpz_cmp(mpz_srcptr op1, mpz_srcptr op2) BIGMATH_ATTR_CONST BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1, 2);
+int mpz_cmp(mpz_srcptr op1, mpz_srcptr op2) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1, 2);
 
-int mpz_cmp_ui(mpz_srcptr op1, unsigned long int val) BIGMATH_ATTR_CONST BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
+int mpz_cmp_ui(mpz_srcptr op1, unsigned long int val) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
 
-int mpz_sgn(mpz_srcptr x) BIGMATH_ATTR_CONST BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
+int mpz_sgn(mpz_srcptr x) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
 
-int mpz_cmpabs(mpz_srcptr op1, mpz_srcptr op2) BIGMATH_ATTR_CONST BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1, 2);
+int mpz_cmpabs(mpz_srcptr op1, mpz_srcptr op2) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1, 2);
 
-int mpz_cmp_si(mpz_srcptr op1, signed long int val) BIGMATH_ATTR_CONST BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
+int mpz_cmp_si(mpz_srcptr op1, signed long int val) BIGMATH_ATTR_PURE BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1);
 
 void mpz_and(mpz_ptr rop, mpz_srcptr op1, mpz_srcptr op2) BIGMATH_NOTHROW BIGMATH_ATTRIBUTE_NONNULL(1, 2, 3);
 

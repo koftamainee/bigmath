@@ -1,5 +1,3 @@
-#include "bigmath/defines.h"
-#include "bigmath/mpn.h"
 #include "bigmath/mpz.h"
 
 void mpz_gcd(mpz_ptr rop, mpz_srcptr op1, mpz_srcptr op2) {
@@ -21,6 +19,7 @@ void mpz_gcd(mpz_ptr rop, mpz_srcptr op1, mpz_srcptr op2) {
   mpz_abs(b, b);
 
   while (mpz_sgn(b) != 0) {
+
     mpz_mod(t, a, b);
     mpz_set(a, b);
     mpz_set(b, t);

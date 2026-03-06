@@ -37,8 +37,9 @@ char* mpz_get_str(char* str, int base, mpz_srcptr x) {
 
   while (tmp_size > 0) {
     mp_limb_t rem = 0;
-
-    for (int i = tmp_size - 1; i >= 0; i--) {
+    int i = tmp_size;
+    do {
+      i--;
 #if defined(__x86_64__) || defined(_M_X64)
       __uint128_t cur = ((__uint128_t)rem << 64) | tmp[i];
       tmp[i] = (mp_limb_t)(cur / base_limb);
@@ -58,7 +59,7 @@ char* mpz_get_str(char* str, int base, mpz_srcptr x) {
       tmp[i] = q;
       rem = hi;
 #endif
-    }
+    } while (i > 0);
 
     buf[buf_len++] = digits[rem];
 
@@ -74,8 +75,12 @@ char* mpz_get_str(char* str, int base, mpz_srcptr x) {
     str[offset++] = '-';
   }
 
-  for (int i = buf_len - 1; i >= 0; i--) {
-    str[offset++] = buf[i];
+  if (buf_len > 0) {
+    int i = buf_len;
+    do {
+      i--;
+      str[offset++] = buf[i];
+    } while (i > 0);
   }
   str[offset] = '\0';
 
