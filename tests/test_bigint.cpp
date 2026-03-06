@@ -445,3 +445,229 @@ TEST(DivisionTest, NumeratorSmallerThanDenominator) {
   EXPECT_EQ(a / b, bigint(0UL));
   EXPECT_EQ(a % b, a);
 }
+
+TEST(BigintIncrement, PreIncrementPositive) {
+  bigint a(41);
+  EXPECT_EQ((int)(++a), 42);
+  EXPECT_EQ((int)a, 42);
+}
+
+TEST(BigintIncrement, PreIncrementNegative) {
+  bigint a(-1);
+  EXPECT_EQ((int)(++a), 0);
+  EXPECT_EQ(a.sign(), 0);
+}
+
+TEST(BigintIncrement, PreIncrementZero) {
+  bigint a(0);
+  EXPECT_EQ((int)(++a), 1);
+}
+
+TEST(BigintIncrement, PreIncrementLarge) {
+  bigint a("99999999999999999999999999999999999999");
+  bigint expected("100000000000000000000000000000000000000");
+  ++a;
+  EXPECT_EQ(a, expected);
+}
+
+TEST(BigintIncrement, PostIncrementReturnsOldValue) {
+  bigint a(41);
+  bigint old = a++;
+  EXPECT_EQ((int)old, 41);
+  EXPECT_EQ((int)a, 42);
+}
+
+TEST(BigintIncrement, PostIncrementNegative) {
+  bigint a(-1);
+  bigint old = a++;
+  EXPECT_EQ((int)old, -1);
+  EXPECT_EQ(a.sign(), 0);
+}
+
+TEST(BigintIncrement, PostIncrementLarge) {
+  bigint a("99999999999999999999999999999999999999");
+  bigint old = a++;
+  EXPECT_EQ(old.to_string(), "99999999999999999999999999999999999999");
+  EXPECT_EQ(a.to_string(), "100000000000000000000000000000000000000");
+}
+
+TEST(BigintDecrement, PreDecrementPositive) {
+  bigint a(43);
+  EXPECT_EQ((int)(--a), 42);
+  EXPECT_EQ((int)a, 42);
+}
+
+TEST(BigintDecrement, PreDecrementZero) {
+  bigint a(0);
+  EXPECT_EQ((int)(--a), -1);
+  EXPECT_EQ(a.sign(), -1);
+}
+
+TEST(BigintDecrement, PreDecrementNegative) {
+  bigint a(-41);
+  EXPECT_EQ((long int)(--a), -42L);
+}
+
+TEST(BigintDecrement, PreDecrementLarge) {
+  bigint a("100000000000000000000000000000000000000");
+  bigint expected("99999999999999999999999999999999999999");
+  --a;
+  EXPECT_EQ(a, expected);
+}
+
+TEST(BigintDecrement, PostDecrementReturnsOldValue) {
+  bigint a(43);
+  bigint old = a--;
+  EXPECT_EQ((int)old, 43);
+  EXPECT_EQ((int)a, 42);
+}
+
+TEST(BigintDecrement, PostDecrementZero) {
+  bigint a(0);
+  bigint old = a--;
+  EXPECT_EQ((int)old, 0);
+  EXPECT_EQ(a.sign(), -1);
+}
+
+TEST(BigintDecrement, PostDecrementLarge) {
+  bigint a("100000000000000000000000000000000000000");
+  bigint old = a--;
+  EXPECT_EQ(old.to_string(), "100000000000000000000000000000000000000");
+  EXPECT_EQ(a.to_string(), "99999999999999999999999999999999999999");
+}
+
+TEST(BigintSafeDiv, OperatorDivThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a / z, std::domain_error);
+}
+
+TEST(BigintSafeDiv, OperatorModThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a % z, std::domain_error);
+}
+
+TEST(BigintSafeDiv, OperatorDivAssignThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a /= z, std::domain_error);
+}
+
+TEST(BigintSafeDiv, OperatorModAssignThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a %= z, std::domain_error);
+}
+
+TEST(BigintSafeDiv, TdivQThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.tdiv_q(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, TdivRThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.tdiv_r(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, TdivQRThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.tdiv_qr(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, FdivQThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.fdiv_q(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, FdivRThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.fdiv_r(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, FdivQRThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.fdiv_qr(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, CdivQThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.cdiv_q(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, CdivRThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.cdiv_r(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, CdivQRThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.cdiv_qr(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, ModThrowsOnZero) {
+  bigint a(100), z(0);
+  EXPECT_THROW(a.mod(z), std::domain_error);
+}
+
+TEST(BigintSafeDiv, ExceptionMessage) {
+  bigint a(1), z(0);
+  try {
+    a / z;
+    FAIL() << "expected std::domain_error";
+  } catch (const std::domain_error& e) {
+    EXPECT_STREQ(e.what(), "bigint: division by zero");
+  }
+}
+
+TEST(BigintUnsafeDiv, TdivQUnsafeWorks) {
+  bigint a(100), b(7);
+  EXPECT_EQ((int)a.tdiv_q_unsafe(b), 14);
+}
+
+TEST(BigintUnsafeDiv, TdivRUnsafeWorks) {
+  bigint a(100), b(7);
+  EXPECT_EQ((int)a.tdiv_r_unsafe(b), 2);
+}
+
+TEST(BigintUnsafeDiv, TdivQRUnsafeWorks) {
+  bigint a(100), b(7);
+  auto [q, r] = a.tdiv_qr_unsafe(b);
+  EXPECT_EQ((int)q, 14);
+  EXPECT_EQ((int)r, 2);
+}
+
+TEST(BigintUnsafeDiv, FdivQUnsafeWorks) {
+  bigint a(-7), b(3);
+  EXPECT_EQ((long int)a.fdiv_q_unsafe(b), -3L);
+}
+
+TEST(BigintUnsafeDiv, FdivRUnsafeWorks) {
+  bigint a(-7), b(3);
+  EXPECT_EQ((long int)a.fdiv_r_unsafe(b), 2L);
+}
+
+TEST(BigintUnsafeDiv, FdivQRUnsafeWorks) {
+  bigint a(-7), b(3);
+  auto [q, r] = a.fdiv_qr_unsafe(b);
+  EXPECT_EQ((long int)q, -3L);
+  EXPECT_EQ((long int)r, 2L);
+}
+
+TEST(BigintUnsafeDiv, CdivQUnsafeWorks) {
+  bigint a(7), b(3);
+  EXPECT_EQ((int)a.cdiv_q_unsafe(b), 3);
+}
+
+TEST(BigintUnsafeDiv, CdivRUnsafeWorks) {
+  bigint a(7), b(3);
+  EXPECT_EQ((long int)a.cdiv_r_unsafe(b), -2L);
+}
+
+TEST(BigintUnsafeDiv, CdivQRUnsafeWorks) {
+  bigint a(7), b(3);
+  auto [q, r] = a.cdiv_qr_unsafe(b);
+  EXPECT_EQ((int)q, 3);
+  EXPECT_EQ((long int)r, -2L);
+}
+
+TEST(BigintUnsafeDiv, ModUnsafeWorks) {
+  bigint a(100), b(7);
+  EXPECT_EQ((int)a.mod_unsafe(b), 2);
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -38,6 +39,11 @@ class bigint {
   bigint& operator*=(const bigint& rhs);
   bigint& operator/=(const bigint& rhs);
   bigint& operator%=(const bigint& rhs);
+
+  bigint& operator++();
+  bigint& operator--();
+  bigint  operator++(int);
+  bigint  operator--(int);
 
   bigint operator&(const bigint& rhs) const;
   bigint operator|(const bigint& rhs) const;
@@ -87,7 +93,20 @@ class bigint {
   bigint cdiv_r(const bigint& d) const;
   std::pair<bigint, bigint> cdiv_qr(const bigint& d) const;
 
+  bigint tdiv_q_unsafe(const bigint& d) const;
+  bigint tdiv_r_unsafe(const bigint& d) const;
+  std::pair<bigint, bigint> tdiv_qr_unsafe(const bigint& d) const;
+
+  bigint fdiv_q_unsafe(const bigint& d) const;
+  bigint fdiv_r_unsafe(const bigint& d) const;
+  std::pair<bigint, bigint> fdiv_qr_unsafe(const bigint& d) const;
+
+  bigint cdiv_q_unsafe(const bigint& d) const;
+  bigint cdiv_r_unsafe(const bigint& d) const;
+  std::pair<bigint, bigint> cdiv_qr_unsafe(const bigint& d) const;
+
   bigint mod(const bigint& d) const;
+  bigint mod_unsafe(const bigint& d) const;
 
   unsigned long int popcount() const;
   int scan1(unsigned long int start) const;
@@ -102,8 +121,10 @@ class bigint {
 
  private:
   __mpz_struct _z;
+
+  static void check_div(const bigint& d);
 };
 
-inline bigint abs(const bigint& a)                                           { return a.abs(); }
-inline bigint pow(const bigint& base, unsigned long int exp)                 { return base.pow(exp); }
-inline bigint powm(const bigint& base, const bigint& exp, const bigint& mod) { return base.powm(exp, mod); }
+inline bigint abs(const bigint& a)                                            { return a.abs(); }
+inline bigint pow(const bigint& base, unsigned long int exp)                  { return base.pow(exp); }
+inline bigint powm(const bigint& base, const bigint& exp, const bigint& mod)  { return base.powm(exp, mod); }
