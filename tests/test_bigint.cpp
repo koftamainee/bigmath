@@ -671,3 +671,275 @@ TEST(BigintUnsafeDiv, ModUnsafeWorks) {
   bigint a(100), b(7);
   EXPECT_EQ((int)a.mod_unsafe(b), 2);
 }
+
+TEST(BigintCmpUL, EqualUL) {
+  bigint a(42UL);
+  EXPECT_TRUE(a == 42UL);
+  EXPECT_FALSE(a != 42UL);
+}
+
+TEST(BigintCmpUL, LessUL) {
+  bigint a(5UL);
+  EXPECT_TRUE(a < 10UL);
+  EXPECT_TRUE(a <= 10UL);
+  EXPECT_TRUE(a <= 5UL);
+}
+
+TEST(BigintCmpUL, GreaterUL) {
+  bigint a(10UL);
+  EXPECT_TRUE(a > 5UL);
+  EXPECT_TRUE(a >= 5UL);
+  EXPECT_TRUE(a >= 10UL);
+}
+
+TEST(BigintCmpUL, ZeroUL) {
+  bigint a(0UL);
+  EXPECT_TRUE(a == 0UL);
+  EXPECT_FALSE(a > 0UL);
+  EXPECT_FALSE(a < 0UL);
+}
+
+TEST(BigintCmpUL, LargeUL) {
+  bigint a("99999999999999999999");
+  EXPECT_FALSE(a == 99999999999999999UL);
+  EXPECT_TRUE(a > 99999999999999999UL);
+}
+
+TEST(BigintCmpSL, EqualSL) {
+  bigint a(-42L);
+  EXPECT_TRUE(a == -42L);
+  EXPECT_FALSE(a != -42L);
+}
+
+TEST(BigintCmpSL, LessSL) {
+  bigint a(-10);
+  EXPECT_TRUE(a < -5L);
+  EXPECT_TRUE(a <= -5L);
+  EXPECT_TRUE(a <= -10L);
+}
+
+TEST(BigintCmpSL, GreaterSL) {
+  bigint a(10);
+  EXPECT_TRUE(a > -1L);
+  EXPECT_TRUE(a >= -1L);
+  EXPECT_TRUE(a >= 10L);
+}
+
+TEST(BigintCmpSL, ZeroSL) {
+  bigint a(0);
+  EXPECT_TRUE(a == 0L);
+  EXPECT_FALSE(a > 0L);
+  EXPECT_FALSE(a < 0L);
+}
+
+TEST(BigintCmpSL, NegativeVsPositiveSL) {
+  bigint a(-1);
+  EXPECT_TRUE(a < 1L);
+  EXPECT_FALSE(a > 0L);
+}
+
+TEST(BigintArithUL, AddUL) {
+  bigint a(100UL);
+  EXPECT_EQ((unsigned long int)(a + 200UL), 300UL);
+}
+
+TEST(BigintArithUL, AddULZero) {
+  bigint a(42UL);
+  EXPECT_EQ((unsigned long int)(a + 0UL), 42UL);
+}
+
+TEST(BigintArithUL, SubUL) {
+  bigint a(300UL);
+  EXPECT_EQ((unsigned long int)(a - 100UL), 200UL);
+}
+
+TEST(BigintArithUL, SubULToZero) {
+  bigint a(42UL);
+  EXPECT_EQ((unsigned long int)(a - 42UL), 0UL);
+}
+
+TEST(BigintArithUL, SubULNegativeResult) {
+  bigint a(5UL);
+  bigint r = a - 10UL;
+  EXPECT_EQ(r.sign(), -1);
+  EXPECT_EQ((long int)r, -5L);
+}
+
+TEST(BigintArithUL, MulUL) {
+  bigint a(100UL);
+  EXPECT_EQ((unsigned long int)(a * 200UL), 20000UL);
+}
+
+TEST(BigintArithUL, MulULZero) {
+  bigint a(99999UL);
+  EXPECT_EQ((unsigned long int)(a * 0UL), 0UL);
+}
+
+TEST(BigintArithUL, MulULOne) {
+  bigint a(12345UL);
+  EXPECT_EQ((unsigned long int)(a * 1UL), 12345UL);
+}
+
+TEST(BigintArithUL, MulULLarge) {
+  bigint a("999999999999999999999999999999");
+  bigint r = a * 2UL;
+  EXPECT_EQ(r.to_string(), "1999999999999999999999999999998");
+}
+
+TEST(BigintArithAssignUL, AddAssignUL) {
+  bigint a(10UL);
+  a += 5UL;
+  EXPECT_EQ((unsigned long int)a, 15UL);
+}
+
+TEST(BigintArithAssignUL, AddAssignULZero) {
+  bigint a(42UL);
+  a += 0UL;
+  EXPECT_EQ((unsigned long int)a, 42UL);
+}
+
+TEST(BigintArithAssignUL, AddAssignULLarge) {
+  bigint a("999999999999999999999999999999");
+  a += 1UL;
+  EXPECT_EQ(a.to_string(), "1000000000000000000000000000000");
+}
+
+TEST(BigintArithAssignUL, SubAssignUL) {
+  bigint a(10UL);
+  a -= 3UL;
+  EXPECT_EQ((unsigned long int)a, 7UL);
+}
+
+TEST(BigintArithAssignUL, SubAssignULToZero) {
+  bigint a(5UL);
+  a -= 5UL;
+  EXPECT_EQ(a.sign(), 0);
+}
+
+TEST(BigintArithAssignUL, SubAssignULNegativeResult) {
+  bigint a(3UL);
+  a -= 10UL;
+  EXPECT_EQ((long int)a, -7L);
+}
+
+TEST(BigintArithAssignUL, MulAssignUL) {
+  bigint a(10UL);
+  a *= 3UL;
+  EXPECT_EQ((unsigned long int)a, 30UL);
+}
+
+TEST(BigintArithAssignUL, MulAssignULZero) {
+  bigint a(99999UL);
+  a *= 0UL;
+  EXPECT_EQ(a.sign(), 0);
+}
+
+TEST(BigintArithAssignUL, MulAssignULOne) {
+  bigint a(12345UL);
+  a *= 1UL;
+  EXPECT_EQ((unsigned long int)a, 12345UL);
+}
+
+TEST(BigintArithAssignUL, MulAssignULLarge) {
+  bigint a("999999999999999999999999999999");
+  a *= 2UL;
+  EXPECT_EQ(a.to_string(), "1999999999999999999999999999998");
+}
+
+TEST(BigintNegate, NegatePositive) {
+  bigint a(42);
+  a.negate();
+  EXPECT_EQ((long int)a, -42L);
+}
+
+TEST(BigintNegate, NegateNegative) {
+  bigint a(-42);
+  a.negate();
+  EXPECT_EQ((int)a, 42);
+}
+
+TEST(BigintNegate, NegateZero) {
+  bigint a(0);
+  a.negate();
+  EXPECT_EQ(a.sign(), 0);
+}
+
+TEST(BigintNegate, NegateChain) {
+  bigint a(10);
+  a.negate().negate();
+  EXPECT_EQ((int)a, 10);
+}
+
+TEST(BigintNegate, NegateReturnsRef) {
+  bigint a(5);
+  bigint& r = a.negate();
+  EXPECT_EQ(&r, &a);
+}
+
+TEST(BigintBitInverse, InversePositive) {
+  bigint a(0);
+  a.bit_inverse();
+  EXPECT_EQ((long int)a, -1L);
+}
+
+TEST(BigintBitInverse, InverseNegOne) {
+  bigint a(-1);
+  a.bit_inverse();
+  EXPECT_EQ((int)a, 0);
+}
+
+TEST(BigintBitInverse, InverseDouble) {
+  bigint a(42);
+  a.bit_inverse().bit_inverse();
+  EXPECT_EQ((int)a, 42);
+}
+
+TEST(BigintBitInverse, InverseReturnsRef) {
+  bigint a(1);
+  bigint& r = a.bit_inverse();
+  EXPECT_EQ(&r, &a);
+}
+
+TEST(BigintBitInverse, InverseMatchesTilde) {
+  bigint a(0xFF);
+  bigint b(0xFF);
+  a.bit_inverse();
+  EXPECT_EQ(a, ~b);
+}
+
+TEST(BigintFactorial, FactorialULZero) {
+  EXPECT_EQ((int)bigint::factorial(0UL), 1);
+}
+
+TEST(BigintFactorial, FactorialULOne) {
+  EXPECT_EQ((int)bigint::factorial(1UL), 1);
+}
+
+TEST(BigintFactorial, FactorialULSmall) {
+  EXPECT_EQ((int)bigint::factorial(5UL), 120);
+}
+
+TEST(BigintFactorial, FactorialUL10) {
+  EXPECT_EQ((int)bigint::factorial(10UL), 3628800);
+}
+
+TEST(BigintFactorial, FactorialULLarge) {
+  bigint r = bigint::factorial(20UL);
+  EXPECT_EQ(r.to_string(), "2432902008176640000");
+}
+
+TEST(BigintFactorial, FactorialBigintZero) {
+  EXPECT_EQ((int)bigint::factorial(bigint(0)), 1);
+}
+
+TEST(BigintFactorial, FactorialBigintSmall) {
+  EXPECT_EQ((int)bigint::factorial(bigint(5)), 120);
+}
+
+TEST(BigintFactorial, FactorialBigintMatchesUL) {
+  EXPECT_EQ(bigint::factorial(bigint(15)), bigint::factorial(15UL));
+}
+
+TEST(BigintFactorial, FactorialBigintNegativeThrows) {
+  EXPECT_THROW(bigint::factorial(bigint(-1)), std::domain_error);
+}

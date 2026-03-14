@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ostream>
-#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -11,11 +10,11 @@ extern "C" {
 
 class bigint {
  public:
-  bigint() noexcept;
-  bigint(int val);
-  bigint(unsigned int val);
-  bigint(long int val) noexcept;
-  bigint(unsigned long int val) noexcept;
+  explicit bigint() noexcept;
+  explicit bigint(int val);
+  explicit bigint(unsigned int val);
+  explicit bigint(long int val) noexcept;
+  explicit bigint(unsigned long int val) noexcept;
   explicit bigint(const std::string& str, int base = 10);
 
   bigint(const bigint& other) noexcept;
@@ -34,11 +33,19 @@ class bigint {
   bigint operator%(const bigint& rhs) const;
   bigint operator-() const;
 
+  bigint operator+(unsigned long int rhs) const;
+  bigint operator-(unsigned long int rhs) const;
+  bigint operator*(unsigned long int rhs) const;
+
   bigint& operator+=(const bigint& rhs);
   bigint& operator-=(const bigint& rhs);
   bigint& operator*=(const bigint& rhs);
   bigint& operator/=(const bigint& rhs);
   bigint& operator%=(const bigint& rhs);
+
+  bigint& operator+=(unsigned long int rhs);
+  bigint& operator-=(unsigned long int rhs);
+  bigint& operator*=(unsigned long int rhs);
 
   bigint& operator++();
   bigint& operator--();
@@ -65,6 +72,20 @@ class bigint {
   bool operator>(const bigint& rhs) const;
   bool operator>=(const bigint& rhs) const;
 
+  bool operator==(unsigned long int rhs) const;
+  bool operator!=(unsigned long int rhs) const;
+  bool operator<(unsigned long int rhs) const;
+  bool operator<=(unsigned long int rhs) const;
+  bool operator>(unsigned long int rhs) const;
+  bool operator>=(unsigned long int rhs) const;
+
+  bool operator==(long int rhs) const;
+  bool operator!=(long int rhs) const;
+  bool operator<(long int rhs) const;
+  bool operator<=(long int rhs) const;
+  bool operator>(long int rhs) const;
+  bool operator>=(long int rhs) const;
+
   explicit operator long int() const;
   explicit operator unsigned long int() const;
   explicit operator int() const;
@@ -73,7 +94,8 @@ class bigint {
   int sign() const noexcept;
 
   bigint abs() const;
-  bigint negate() const;
+  bigint& negate() &;
+  bigint& bit_inverse() &;
   bigint pow(unsigned long int exp) const;
   bigint powm(const bigint& exp, const bigint& mod) const;
   bool invert(bigint& rop, const bigint& mod) const;
@@ -119,8 +141,11 @@ class bigint {
   __mpz_struct*       mpz() noexcept;
   const __mpz_struct* mpz() const noexcept;
 
+  static bigint factorial(bigint const& n);
+  static bigint factorial(unsigned long int n);
+
  private:
-  __mpz_struct _z;
+  __mpz_struct _z{};
 
   static void check_div(const bigint& d);
 };

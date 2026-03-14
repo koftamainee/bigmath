@@ -93,6 +93,13 @@ target_include_directories(bigmath PUBLIC
 if(BIGMATH_BUILD_CXX)
     add_library(bigmath++ STATIC
             src/bigint/bigint.cpp
+            src/bigfloat/arithmetics.cpp
+            src/bigfloat/bigfloat.cpp
+            src/bigfloat/exponential.cpp
+            src/bigfloat/io.cpp
+            src/bigfloat/logarithmic.cpp
+            src/bigfloat/logical.cpp
+            src/bigfloat/trigonometry.cpp
     )
     target_link_libraries(bigmath++ PUBLIC bigmath)
     target_include_directories(bigmath++ PUBLIC
