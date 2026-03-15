@@ -99,6 +99,15 @@ int main() {
     //
     // }
 
+
+  bigfloat eps(bigint(1UL), bigint("100000000000000"));
+  bigfloat pi = bigfloat::PI(eps);
+  std::cout << cos(pi, eps).to_decimal(10) << std::endl;
+  std::cout << sin(pi, eps).to_decimal(10) << std::endl;
+  std::cout << tg(pi, eps).to_decimal(10) << std::endl;
+  std::cout << arctg(pi, eps).to_decimal(10) << std::endl;
+  // std::cout << arcsin(pi).to_decimal(10) << std::endl;
+
     std::cout << "=== done ===\n";
     return 0;
 }

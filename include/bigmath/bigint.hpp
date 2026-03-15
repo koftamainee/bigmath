@@ -10,12 +10,12 @@ extern "C" {
 
 class bigint {
  public:
-  explicit bigint() noexcept;
-  explicit bigint(int val);
-  explicit bigint(unsigned int val);
-  explicit bigint(long int val) noexcept;
-  explicit bigint(unsigned long int val) noexcept;
-  explicit bigint(const std::string& str, int base = 10);
+  bigint() noexcept;
+  bigint(int val);
+  bigint(unsigned int val);
+  bigint(long int val) noexcept;
+  bigint(unsigned long int val) noexcept;
+  bigint(const std::string& str, int base = 10);
 
   bigint(const bigint& other) noexcept;
   bigint(bigint&& other) noexcept;

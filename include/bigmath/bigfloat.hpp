@@ -27,12 +27,12 @@ class bigfloat final {
 
   static void compute_bernoulli_up_to(size_t n);
 
-  explicit bigfloat();
-  explicit bigfloat(bigint const &numerator, bigint const &denominator);
-  explicit bigfloat(bigint const &other);
-  explicit bigfloat(int other);
-  explicit bigfloat(long int other);
-  explicit bigfloat(unsigned long int other);
+  bigfloat();
+  bigfloat(bigint const &numerator, bigint const &denominator);
+  bigfloat(bigint const &other);
+  bigfloat(int other);
+  bigfloat(long int other);
+  bigfloat(unsigned long int other);
   bigfloat(bigfloat const &other) = default;
   bigfloat(bigfloat &&other) noexcept = default;
   ~bigfloat() noexcept = default;
