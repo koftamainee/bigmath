@@ -143,6 +143,7 @@ class bigint {
 
   static bigint factorial(bigint const& n);
   static bigint factorial(unsigned long int n);
+  static bigint rand_range(const bigint &lower, const bigint &upper);
 
  private:
   __mpz_struct _z{};

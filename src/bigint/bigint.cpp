@@ -1,5 +1,7 @@
 #include "bigmath/bigint.hpp"
 
+#include <random>
+
 bigint::bigint() noexcept { mpz_init(&_z); }
 bigint::bigint(int val) : bigint(static_cast<long int>(val)) {}
 bigint::bigint(unsigned int val) : bigint(static_cast<unsigned long int>(val)) {}
@@ -93,6 +95,31 @@ bigint bigint::factorial(unsigned long int n) {
     result *= bigint(i);
   }
   return result;
+}
+
+bigint bigint::rand_range(const bigint &lower, const bigint &upper) {
+  if (lower > upper) throw std::invalid_argument("lower > upper in rand_range");
+
+  static thread_local std::mt19937_64 gen(std::random_device{}());
+
+  bigint range = upper - lower + 1;
+
+  const size_t n_bits = range.size() * 64;
+
+  bigint result;
+  const size_t n_limbs = (n_bits + 63) / 64;
+  result._z._mp_alloc = static_cast<int>(n_limbs);
+  result._z._mp_size = static_cast<int>(n_limbs);
+  result._z._mp_d = __BIGMATH_ALLOC_LIMBS(n_limbs);
+
+  for (size_t i = 0; i < n_limbs; ++i) {
+    result._z._mp_d[i] = static_cast<mp_limb_t>(gen());
+  }
+
+  bigint modded;
+  mpz_mod(modded.mpz(), result.mpz(), range.mpz());
+
+  return lower + modded;
 }
 
 bigint bigint::factorial(bigint const& n) {
@@ -252,7 +279,7 @@ bigint bigint::abs() const {
   mpz_abs(&r._z, &_z);
   return r;
 }
-bigint &bigint::negate() & {
+bigint& bigint::negate() & {
   mpz_neg(&_z, &_z);
   return *this;
 }
@@ -423,16 +450,16 @@ const __mpz_struct* bigint::mpz() const noexcept { return &_z; }
 
 bool bigint::operator==(unsigned long int rhs) const { return mpz_cmp_ui(&_z, rhs) == 0; }
 bool bigint::operator!=(unsigned long int rhs) const { return mpz_cmp_ui(&_z, rhs) != 0; }
-bool bigint::operator<(unsigned long int rhs) const  { return mpz_cmp_ui(&_z, rhs) <  0; }
+bool bigint::operator<(unsigned long int rhs) const { return mpz_cmp_ui(&_z, rhs) < 0; }
 bool bigint::operator<=(unsigned long int rhs) const { return mpz_cmp_ui(&_z, rhs) <= 0; }
-bool bigint::operator>(unsigned long int rhs) const  { return mpz_cmp_ui(&_z, rhs) >  0; }
+bool bigint::operator>(unsigned long int rhs) const { return mpz_cmp_ui(&_z, rhs) > 0; }
 bool bigint::operator>=(unsigned long int rhs) const { return mpz_cmp_ui(&_z, rhs) >= 0; }
 
 bool bigint::operator==(long int rhs) const { return mpz_cmp_si(&_z, rhs) == 0; }
 bool bigint::operator!=(long int rhs) const { return mpz_cmp_si(&_z, rhs) != 0; }
-bool bigint::operator<(long int rhs) const  { return mpz_cmp_si(&_z, rhs) <  0; }
+bool bigint::operator<(long int rhs) const { return mpz_cmp_si(&_z, rhs) < 0; }
 bool bigint::operator<=(long int rhs) const { return mpz_cmp_si(&_z, rhs) <= 0; }
-bool bigint::operator>(long int rhs) const  { return mpz_cmp_si(&_z, rhs) >  0; }
+bool bigint::operator>(long int rhs) const { return mpz_cmp_si(&_z, rhs) > 0; }
 bool bigint::operator>=(long int rhs) const { return mpz_cmp_si(&_z, rhs) >= 0; }
 
 bigint bigint::operator+(unsigned long int rhs) const {

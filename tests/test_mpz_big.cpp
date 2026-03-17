@@ -72,7 +72,7 @@ TEST_F(MpzOpsTest, GetSi) {
     mpz_init(x);
     mpz_set_str10(x, "-9223372036854775808");
     long val = mpz_get_si(x);
-    EXPECT_EQ(val, (long)-9223372036854775808LL);
+    EXPECT_EQ(val, -9223372036854775808ULL);
     mpz_clear(x);
 }
 

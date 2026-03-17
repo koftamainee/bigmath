@@ -943,3 +943,9 @@ TEST(BigintFactorial, FactorialBigintMatchesUL) {
 TEST(BigintFactorial, FactorialBigintNegativeThrows) {
   EXPECT_THROW(bigint::factorial(bigint(-1)), std::domain_error);
 }
+
+TEST(BigintRandRange, Basic) {
+  const bigint random = bigint::rand_range(bigint("12345"), bigint("67890"));
+  EXPECT_TRUE(random < bigint("67890"));
+  EXPECT_TRUE(random >= bigint("12345"));
+}
