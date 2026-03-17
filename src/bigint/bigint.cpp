@@ -103,22 +103,18 @@ bigint bigint::rand_range(const bigint &lower, const bigint &upper) {
   static thread_local std::mt19937_64 gen(std::random_device{}());
 
   bigint range = upper - lower + 1;
+  const size_t n_limbs = range.size();
 
-  const size_t n_bits = range.size() * 64;
-
-  bigint result;
-  const size_t n_limbs = (n_bits + 63) / 64;
-  result._z._mp_alloc = static_cast<int>(n_limbs);
-  result._z._mp_size = static_cast<int>(n_limbs);
-  result._z._mp_d = __BIGMATH_ALLOC_LIMBS(n_limbs);
-
+  bigint result(0UL);
   for (size_t i = 0; i < n_limbs; ++i) {
-    result._z._mp_d[i] = static_cast<mp_limb_t>(gen());
+    bigint limb(static_cast<unsigned long int>(gen()));
+    bigint shifted;
+    mpz_mul_2exp(shifted.mpz(), limb.mpz(), i * 64);
+    mpz_add(result.mpz(), result.mpz(), shifted.mpz());
   }
 
   bigint modded;
   mpz_mod(modded.mpz(), result.mpz(), range.mpz());
-
   return lower + modded;
 }
 
