@@ -28,8 +28,8 @@ class bigfloat final {
   static void compute_bernoulli_up_to(size_t n);
 
   bigfloat();
-  bigfloat(bigint const &numerator, bigint const &denominator);
-  bigfloat(bigint const &other);
+  explicit bigfloat(bigint const &numerator, bigint const &denominator);
+  explicit bigfloat(bigint const &other);
   bigfloat(int other);
   bigfloat(long int other);
   bigfloat(unsigned long int other);
