@@ -51,6 +51,7 @@ class bigfloat final {
   bigfloat abs() const;
   bigfloat reciprocal() const;
   bigfloat truncate() const;
+  bigint round() const;
 
   friend bigfloat operator+(bigfloat const &first, bigfloat const &second);
   friend bigfloat operator-(bigfloat const &first, bigfloat const &second);

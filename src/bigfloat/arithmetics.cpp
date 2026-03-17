@@ -90,3 +90,11 @@ bigfloat bigfloat::reciprocal() const {
 }
 
 bigfloat bigfloat::truncate() const { return bigfloat(numerator_ / denominator_, bigint(1UL)); }
+
+bigint bigfloat::round() const {
+  if (denominator_ > 0L) {
+    return bigint((numerator_ + denominator_ / 2) / denominator_);
+  } else {
+    return bigint((numerator_ - denominator_ / 2) / denominator_);
+  }
+}
